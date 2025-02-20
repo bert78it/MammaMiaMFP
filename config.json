@@ -1,9 +1,9 @@
 {
     "Siti": {
         "StreamingCommunity": {
-            "domain": "lu",
+            "domain": "luo",
             "SC_ForwardProxy": "0",
-            "SC_PROXY": "1",
+            "SC_PROXY": "0",
             "VX_ForwardProxy": "0",
             "VX_PROXY": "0",
             "enabled": "1"
