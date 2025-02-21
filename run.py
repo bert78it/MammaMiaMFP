@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException,Request
-from fastapi.responses import JSONResponse,RedirectResponse,HTMLResponse
+from fastapi.responses import JSONResponse,RedirectResponse,HTMLResponse, Response
 from Src.API.filmpertutti import filmpertutti
 from  Src.API.streamingcommunity import streaming_community
 from  Src.API.tantifilm import tantifilm
@@ -120,13 +120,17 @@ def addon_manifest(config: str):
 def manifest():
     return RedirectResponse(url="/|SC|LC|SW|/manifest.json")
 
+@app.head("/")
+async def head_root():
+    return Response(status_code=200)
+
 @app.get('/', response_class=HTMLResponse)
 def root(request: Request):
     forwarded_proto = request.headers.get("x-forwarded-proto")
     scheme = forwarded_proto if forwarded_proto else request.url.scheme
     instance_url = f"{scheme}://{request.url.netloc}"
     html_content = HTML.replace("{instance_url}", instance_url)
-    return html_content
+    return HTMLResponse(content=html_content,status_code=200)
 async def addon_catalog(type: str, id: str, genre: str = None):
     if type != "tv":
         raise HTTPException(status_code=404)
@@ -384,4 +388,3 @@ async def addon_stream(request: Request,config, type, id,):
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run("run:app", host=HOST, port=PORT, log_level="info")
-    
